@@ -8,8 +8,8 @@ ARG uid=1000
 ARG gid=1000
 
 ENV HOME /home/${user}
-RUN groupadd -g ${gid} ${group}
-RUN useradd -c "Jenkins user" -d $HOME -u ${uid} -g ${gid} -m ${user}
+# RUN groupadd -g ${gid} ${group}
+# RUN useradd -c "Jenkins user" -d $HOME -u ${uid} -g ${gid} -m ${user}
 LABEL Description="This is a base image, which provides the Jenkins agent executable (slave.jar)" Vendor="Jenkins project" Version="${VERSION}"
 
 ARG AGENT_WORKDIR=/home/${user}/agent
