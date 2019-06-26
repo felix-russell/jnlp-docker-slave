@@ -7,12 +7,12 @@ ARG group=root
 ARG uid=1000
 ARG gid=1000
 
-ENV HOME /home/${user}
+ENV HOME /root
 # RUN groupadd -g ${gid} ${group}
 # RUN useradd -c "Jenkins user" -d $HOME -u ${uid} -g ${gid} -m ${user}
 LABEL Description="This is a base image, which provides the Jenkins agent executable (slave.jar)" Vendor="Jenkins project" Version="${VERSION}"
 
-ARG AGENT_WORKDIR=/home/${user}/agent
+ARG AGENT_WORKDIR=/root/agent
 
 RUN echo 'deb http://deb.debian.org/debian stretch-backports main' > /etc/apt/sources.list.d/stretch-backports.list
 RUN apt-get update && apt-get install -t stretch-backports git-lfs
@@ -22,14 +22,14 @@ RUN curl --create-dirs -fsSLo /usr/share/jenkins/slave.jar https://repo.jenkins-
 
 USER ${user}
 ENV AGENT_WORKDIR=${AGENT_WORKDIR}
-RUN mkdir /home/${user}/.jenkins && mkdir -p ${AGENT_WORKDIR}
+RUN mkdir /root/.jenkins && mkdir -p ${AGENT_WORKDIR}
 
-VOLUME /home/${user}/.jenkins
+VOLUME /root/.jenkins
 VOLUME ${AGENT_WORKDIR}
-WORKDIR /home/${user}
+WORKDIR /root
 
-RUN git clone https://github.com/jenkinsci/docker-jnlp-slave.git
-COPY docker-jnlp-slave/jenkins-slave /usr/local/bin/jenkins-slave
+RUN git clone https://github.com/jenkinsci/docker-jnlp-slave.git \
+  && cp docker-jnlp-slave/jenkins-slave /usr/local/bin/jenkins-slave
 
 RUN wget https://download.docker.com/linux/static/stable/x86_64/docker-18.06.3-ce.tgz \
   && tar xvzf docker-18.06.3-ce.tgz \
